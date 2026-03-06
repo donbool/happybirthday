@@ -7,22 +7,18 @@
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const poses = {
-    center: "./assets/centerfacing.png",
-    cycle: [
-      "./assets/rightfacing.png",
-      "./assets/leftfacing.png",
-      "./assets/babyfreeze.png",
-      "./assets/jump.png"
-    ]
-  };
+  const poses = [
+    "./assets/rightfacing.png",
+    "./assets/leftfacing.png",
+    "./assets/babyfreeze.png"
+  ];
 
   let phase = "idle";
   let poseIndex = 0;
   let danceTapCount = 0;
   let lastTapAt = 0;
 
-  preloadImages([poses.center, ...poses.cycle, "./assets/stage-bg.svg"]);
+  preloadImages([...poses, "./assets/stage-bg.svg"]);
 
   function preloadImages(srcList) {
     srcList.forEach((src) => {
@@ -53,7 +49,8 @@
       phase = "dance";
       dancer.hidden = false;
       dancer.classList.add("is-active");
-      dancer.src = poses.center;
+      dancer.src = poses[poseIndex];
+      poseIndex = (poseIndex + 1) % poses.length;
       popDancer();
       prompt.classList.add("is-hidden");
       headline.classList.add("is-gone");
@@ -63,8 +60,8 @@
     }
 
     danceTapCount += 1;
-    const nextPose = poses.cycle[poseIndex % poses.cycle.length];
-    poseIndex += 1;
+    const nextPose = poses[poseIndex];
+    poseIndex = (poseIndex + 1) % poses.length;
     dancer.src = nextPose;
     popDancer();
 
