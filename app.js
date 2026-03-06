@@ -4,21 +4,15 @@
   const dancer = document.getElementById("dancer");
   const prompt = document.getElementById("prompt");
   const confettiLayer = document.getElementById("confetti-layer");
+  const dancerGifSrc = "./assets/dance.gif";
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const poses = [
-    "./assets/rightfacing.png",
-    "./assets/leftfacing.png",
-    "./assets/babyfreeze.png"
-  ];
-
   let phase = "idle";
-  let poseIndex = 0;
   let danceTapCount = 0;
   let lastTapAt = 0;
 
-  preloadImages([...poses, "./assets/stage-bg.svg"]);
+  preloadImages([dancerGifSrc, "./assets/stage-bg.svg"]);
 
   function preloadImages(srcList) {
     srcList.forEach((src) => {
@@ -49,8 +43,7 @@
       phase = "dance";
       dancer.hidden = false;
       dancer.classList.add("is-active");
-      dancer.src = poses[poseIndex];
-      poseIndex = (poseIndex + 1) % poses.length;
+      dancer.src = dancerGifSrc;
       popDancer();
       prompt.classList.add("is-hidden");
       headline.classList.add("is-gone");
@@ -60,9 +53,6 @@
     }
 
     danceTapCount += 1;
-    const nextPose = poses[poseIndex];
-    poseIndex = (poseIndex + 1) % poses.length;
-    dancer.src = nextPose;
     popDancer();
 
     if (danceTapCount % 3 === 0) {
