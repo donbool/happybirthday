@@ -62,7 +62,7 @@
       dancer.classList.remove("is-gif");
       dancer.src = poses.center;
       popDancer();
-      prompt.classList.add("is-hidden");
+      prompt.textContent = "keep tapping";
       headline.classList.add("is-gone");
       launchConfetti(24, false);
       stagePulse();
@@ -70,6 +70,10 @@
     }
 
     danceTapCount += 1;
+    if (danceTapCount >= 4) {
+      prompt.textContent = "keep going";
+    }
+
     if (!hasSwitchedToGif) {
       const nextPose = poses.cycle[poseIndex % poses.cycle.length];
       poseIndex += 1;
@@ -84,6 +88,7 @@
         hasSwitchedToGif = true;
         dancer.src = danceGifSrc;
         dancer.classList.add("is-gif");
+        prompt.classList.add("is-hidden");
       }
     }
 
