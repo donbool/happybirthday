@@ -65,6 +65,7 @@
     if (phase === "idle") {
       startAudioOnFirstTap();
       phase = "title";
+      headline.hidden = false;
       headline.classList.add("is-visible");
       headline.classList.remove("is-gone");
       prompt.textContent = "tap again";
@@ -85,7 +86,7 @@
       dancer.src = poses.center;
       popDancer();
       prompt.textContent = "keep tapping";
-      headline.classList.add("is-gone");
+      hideHeadlineForDance();
       launchConfetti(24, false);
       stagePulse();
       return;
@@ -137,6 +138,17 @@
         hasStartedAudio = false;
       });
     }
+  }
+
+  function hideHeadlineForDance() {
+    headline.classList.remove("is-visible");
+    headline.classList.add("is-gone");
+
+    window.setTimeout(() => {
+      if (phase !== "title") {
+        headline.hidden = true;
+      }
+    }, 320);
   }
 
   function popDancer() {

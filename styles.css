@@ -83,17 +83,20 @@ body {
     2px 2px 0 var(--headline-shadow);
   transform: translate(-50%, -50%) scale(0.88);
   opacity: 0;
+  visibility: hidden;
   transition: opacity 260ms ease, transform 280ms ease;
   pointer-events: none;
 }
 
 .headline.is-visible {
   opacity: 1;
+  visibility: visible;
   transform: translate(-50%, -50%) scale(1);
 }
 
 .headline.is-gone {
   opacity: 0;
+  visibility: hidden;
   transform: translate(-50%, -58%) scale(0.96);
 }
 
