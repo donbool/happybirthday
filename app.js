@@ -4,6 +4,7 @@
   const dancer = document.getElementById("dancer");
   const prompt = document.getElementById("prompt");
   const confettiLayer = document.getElementById("confetti-layer");
+  const partyAudio = document.getElementById("party-audio");
   const danceGifSrc = "./assets/dance.gif";
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -23,6 +24,7 @@
   let danceTapCount = 0;
   let completedPoseLoops = 0;
   let hasSwitchedToGif = false;
+  let hasStartedAudio = false;
   let lastTapAt = 0;
 
   preloadImages([poses.center, ...poses.cycle, danceGifSrc, "./assets/stage-bg.svg"]);
@@ -42,6 +44,7 @@
     lastTapAt = now;
 
     if (phase === "idle") {
+      startAudioOnFirstTap();
       phase = "title";
       headline.classList.add("is-visible");
       headline.classList.remove("is-gone");
@@ -89,6 +92,20 @@
     if (danceTapCount % 3 === 0) {
       launchConfetti(12, false);
       stagePulse();
+    }
+  }
+
+  function startAudioOnFirstTap() {
+    if (hasStartedAudio || !partyAudio) {
+      return;
+    }
+
+    hasStartedAudio = true;
+    const playPromise = partyAudio.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {
+        hasStartedAudio = false;
+      });
     }
   }
 
