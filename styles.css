@@ -102,6 +102,7 @@ body {
   width: min(72vw, 250px);
   max-width: 300px;
   aspect-ratio: 487 / 512;
+  position: relative;
   display: grid;
   place-items: center;
   align-self: center;
@@ -126,6 +127,38 @@ body {
 
 .dancer.pose-pop {
   animation: pose-pop 260ms ease-out;
+}
+
+.jiggy-note {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 10px);
+  transform: translateX(-50%);
+  margin: 0;
+  width: min(92vw, 20rem);
+  text-align: center;
+  color: #fff6c7;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
+  font-family: "Courier New", monospace;
+  font-size: clamp(0.78rem, 3.3vw, 0.96rem);
+  letter-spacing: 0.6px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.jiggy-note.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.jiggy-note .wave-char {
+  display: inline-block;
+}
+
+.jiggy-note.is-visible .wave-char {
+  animation: jiggy-wave 1.8s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 70ms);
 }
 
 .prompt {
@@ -211,6 +244,14 @@ body {
   100% { opacity: 0; }
 }
 
+@keyframes jiggy-wave {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-3px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+
 @keyframes confetti-fall {
   0% {
     transform: translate(-50%, 0) rotate(0deg);
@@ -225,6 +266,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .prompt,
   .dancer.pose-pop,
+  .jiggy-note.is-visible .wave-char,
   .stage.pulse .stage__lights,
   .confetti {
     animation: none !important;

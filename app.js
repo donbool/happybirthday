@@ -2,6 +2,7 @@
   const stage = document.getElementById("stage");
   const headline = document.getElementById("headline");
   const dancer = document.getElementById("dancer");
+  const jiggyNote = document.getElementById("jiggy-note");
   const prompt = document.getElementById("prompt");
   const confettiLayer = document.getElementById("confetti-layer");
   const partyAudio = document.getElementById("party-audio");
@@ -28,11 +29,29 @@
   let lastTapAt = 0;
 
   preloadImages([poses.center, ...poses.cycle, danceGifSrc, "./assets/stage-bg.svg"]);
+  setupJiggyWave();
 
   function preloadImages(srcList) {
     srcList.forEach((src) => {
       const img = new Image();
       img.src = src;
+    });
+  }
+
+  function setupJiggyWave() {
+    if (!jiggyNote) {
+      return;
+    }
+
+    const text = jiggyNote.textContent || "";
+    jiggyNote.textContent = "";
+
+    Array.from(text).forEach((char, index) => {
+      const span = document.createElement("span");
+      span.className = "wave-char";
+      span.style.setProperty("--i", String(index));
+      span.textContent = char === " " ? "\u00A0" : char;
+      jiggyNote.appendChild(span);
     });
   }
 
@@ -60,6 +79,9 @@
       dancer.hidden = false;
       dancer.classList.add("is-active");
       dancer.classList.remove("is-gif");
+      if (jiggyNote) {
+        jiggyNote.classList.remove("is-visible");
+      }
       dancer.src = poses.center;
       popDancer();
       prompt.textContent = "keep tapping";
@@ -88,6 +110,9 @@
         hasSwitchedToGif = true;
         dancer.src = danceGifSrc;
         dancer.classList.add("is-gif");
+        if (jiggyNote) {
+          jiggyNote.classList.add("is-visible");
+        }
         prompt.classList.add("is-hidden");
       }
     }
