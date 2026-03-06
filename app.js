@@ -4,15 +4,28 @@
   const dancer = document.getElementById("dancer");
   const prompt = document.getElementById("prompt");
   const confettiLayer = document.getElementById("confetti-layer");
-  const dancerGifSrc = "./assets/dance.gif";
+  const danceGifSrc = "./assets/dance.gif";
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  const poses = {
+    center: "./assets/centerfacing.png",
+    cycle: [
+      "./assets/rightfacing.png",
+      "./assets/leftfacing.png",
+      "./assets/babyfreeze.png",
+      "./assets/jump.png"
+    ]
+  };
+
   let phase = "idle";
+  let poseIndex = 0;
   let danceTapCount = 0;
+  let completedPoseLoops = 0;
+  let hasSwitchedToGif = false;
   let lastTapAt = 0;
 
-  preloadImages([dancerGifSrc, "./assets/stage-bg.svg"]);
+  preloadImages([poses.center, ...poses.cycle, danceGifSrc, "./assets/stage-bg.svg"]);
 
   function preloadImages(srcList) {
     srcList.forEach((src) => {
@@ -43,7 +56,8 @@
       phase = "dance";
       dancer.hidden = false;
       dancer.classList.add("is-active");
-      dancer.src = dancerGifSrc;
+      dancer.classList.remove("is-gif");
+      dancer.src = poses.center;
       popDancer();
       prompt.classList.add("is-hidden");
       headline.classList.add("is-gone");
@@ -53,6 +67,23 @@
     }
 
     danceTapCount += 1;
+    if (!hasSwitchedToGif) {
+      const nextPose = poses.cycle[poseIndex % poses.cycle.length];
+      poseIndex += 1;
+
+      if (poseIndex % poses.cycle.length === 0) {
+        completedPoseLoops += 1;
+      }
+
+      dancer.src = nextPose;
+
+      if (completedPoseLoops >= 2) {
+        hasSwitchedToGif = true;
+        dancer.src = danceGifSrc;
+        dancer.classList.add("is-gif");
+      }
+    }
+
     popDancer();
 
     if (danceTapCount % 3 === 0) {
